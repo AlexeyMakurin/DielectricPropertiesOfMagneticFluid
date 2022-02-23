@@ -18,6 +18,8 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QFile>
+#include <QFontDialog>
+#include <QColorDialog>
 
 #include "download_file.h"
 #include "read_file.h"
@@ -66,13 +68,47 @@ private slots:
 
     void on_lineEdit_temp_textChanged(const QString &arg1);
 
-    void on_ChartEpsilonTittle_textChanged();
-
     void on_ChartEpsilonTittle_textChanged(const QString &arg1);
 
-    void on_ChartEpsilonAxisXname_textChanged(const QString &arg1);
+    void on_ChartEpsilonAxisName_textChanged(const QString &arg1);
 
-    void on_ChartEpsilonAxisYname_textChanged(const QString &arg1);
+
+    void on_EpsilonTitleFont_clicked();
+
+    void on_EpsilonFontAxis_clicked();
+
+    void on_MajorEpsilonCount_valueChanged(int arg1);
+
+    void on_EpsilonMajorColor_clicked();
+
+
+    void on_EpsilonMajorStyle_activated(int index);
+
+    void on_EpsilonMinorColor_clicked();
+
+    void on_MinorEpsilonCount_valueChanged(int arg1);
+
+    void on_EpsilonMinorStyle_activated(int index);
+
+    void on_EpsilonseriesColor_clicked();
+
+    void on_EpsilonMarkerSize_valueChanged(int arg1);
+
+    void on_EpsilonMarkers_activated(int index);
+
+    void on_EpsilonSeries_activated(int index);
+
+    void on_EpsilonLegendShow_stateChanged(int arg1);
+
+    void on_EpsilonLegendFont_clicked();
+
+    void on_SettingsChartCoul_clicked();
+
+    void on_TitleChartCoul_textChanged(const QString &arg1);
+
+    void on_FontTitleChartCoul_clicked();
+
+    void on_SettingsHist_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -105,6 +141,8 @@ private:
 
     bool hidden_frame = true;
     bool hidden_setting_e = true;
+    bool hidden_setting_coul = true;
+    bool hidden_settings_hist = true;
     bool act_cell = true;
     bool align = false;
 

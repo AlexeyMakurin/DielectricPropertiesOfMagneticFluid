@@ -11,15 +11,19 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowTitle("Dielectric Properties Of Magnetic Fluid");
 
     ui->SetingChartEpsilon->setHidden(hidden_setting_e);
     ui->frame->setHidden(hidden_frame);
+    ui->SettingChartCoul->setHidden(hidden_setting_coul);
+    ui->SettingsHistFrame->setHidden(hidden_settings_hist);
 
     ui->lineEdit_C0->setText(QString::number(mf.c0_));
     ui->lineEdit_D0->setText(QString::number(mf.tan_d0_));
     ui->lineEdit_eta->setText(QString::number(mf.eta_));
     ui->lineEdit_temp->setText(QString::number(mf.T_));
 
+    ///Setting Table
     ui->tableWidget->setRowCount(14);
     ui->tableWidget->setColumnCount(7);
     ui->tableWidget->setHorizontalHeaderLabels(
@@ -32,7 +36,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     protoitem->setTextAlignment(Qt::AlignHCenter);
     ui->tableWidget->setItemPrototype(protoitem);
+    ///
 
+    ///Histogram
     axisY->setTitleText("concentration");
     axisY->setRange(0, 1);
     axisY->setMinorTickCount(4);
@@ -43,12 +49,15 @@ MainWindow::MainWindow(QWidget *parent)
     view_dist->setChart(chart_dist);
     view_dist->setRenderHint(QPainter::Antialiasing);
     ui->distributionLayout->addWidget(view_dist);
+    ///
 
     series_re_e->setName("Re(epsilon)");
     series_im_e->setName("Im(epsilon)");
 
     CreateChart(ui->epsilonLayout, view_epsilon, chart_epsilon, {series_re_e, series_im_e}, "frequency (kHz)", "epsilon", x_max_e, y_max_e, true);
     CreateChart(ui->coulcoulLayout, view_coul, chart_coul, {series_coul}, "Re(epsiloin)", "Im(epsilon)", x_max_coul, y_max_coul);
+
+    ui->EpsilonMarkerSize->setValue(12);
 
     QObject::connect(series_re_e, &QScatterSeries::pointAdded, [=](){
         AutoScale(chart_epsilon, series_re_e, x_max_e, y_max_e);
@@ -121,6 +130,16 @@ MainWindow::MainWindow(QWidget *parent)
        }
 
     });
+
+    ui->EpsilonLegend_h->setValue(chart_epsilon->legend()->x());
+    ui->EpsilonLegend_v->setValue(chart_epsilon->legend()->y());
+    ui->EpsilonLegend_he->setValue(chart_epsilon->legend()->geometry().height());
+    ui->EpsilonLegend_w->setValue(chart_epsilon->legend()->geometry().width());
+
+    connect(chart_epsilon->legend(), &QLegend::attachedToChartChanged, [=](bool attachedToChart) {
+        chart_epsilon->legend()->setBackgroundVisible(!attachedToChart);
+    });
+
 
 }
 
@@ -215,6 +234,7 @@ void MainWindow::CreateChart(QLayout *layout, QChartView *view, QChart *chart, s
     pen.setColor("#6CC4FF");
     pen.setStyle(Qt::DashLine);
 
+
     axisX->setMinorGridLinePen(pen_minor);
     axisX->setGridLinePen(pen);
     axisX->setLabelFormat("%.2f");
@@ -235,8 +255,9 @@ void MainWindow::CreateChart(QLayout *layout, QChartView *view, QChart *chart, s
         chart->addSeries(series[i]);
         series[i]->attachAxis(axisX);
         series[i]->attachAxis(axisY);
-        series[i]->setMarkerSize(8);
-        series[i]->setBorderColor("#808B96");
+        series[i]->setMarkerSize(12);
+
+        //series[i]->setBorderColor("#808B96");
 /*
         if (i % 2 == 0) {
             series[i]->setMarkerShape(QScatterSeries::MarkerShapeCircle);
@@ -259,7 +280,8 @@ void MainWindow::CreateChart(QLayout *layout, QChartView *view, QChart *chart, s
     chart->legend()->setMarkerShape(QLegend::MarkerShapeCircle);
 
     chart->legend()->setAlignment(Qt::AlignRight);
-
+    chart->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
+    chart->legend()->setInteractive(true);
     //QChartView *view = new QChartView(chart);
     view->setChart(chart);
     view->setRenderHint(QPainter::Antialiasing);
@@ -517,24 +539,257 @@ void MainWindow::on_additional_quantities_clicked() {
 
 
 
-
-
-void MainWindow::on_ChartEpsilonTittle_textChanged() {
-
-}
-
-
 void MainWindow::on_ChartEpsilonTittle_textChanged(const QString &arg1) {
     chart_epsilon->setTitle(arg1);
 }
 
 
-void MainWindow::on_ChartEpsilonAxisXname_textChanged(const QString &arg1) {
-    series_re_e->setName(arg1);
+void MainWindow::on_ChartEpsilonAxisName_textChanged(const QString &arg1) {
+    QString name_axis = ui->choise_axis->currentText();
+
+    if (name_axis == "X") {
+        chart_epsilon->axisX()->setTitleText(arg1);
+    } else if (name_axis == "Y") {
+        chart_epsilon->axisY()->setTitleText(arg1);
+    }
+
 }
 
 
-void MainWindow::on_ChartEpsilonAxisYname_textChanged(const QString &arg1) {
-    series_im_e->setName(arg1);
+void MainWindow::on_EpsilonTitleFont_clicked() {
+    bool ok;
+    QFont font = QFontDialog::getFont(&ok, QFont("Embria"), this);
+
+    if(ok) {
+        chart_epsilon->setTitleFont(font);
+    }
+}
+
+
+void MainWindow::on_EpsilonFontAxis_clicked() {
+    bool ok;
+    QFont font = QFontDialog::getFont(&ok, QFont("Embria"), this);
+
+    if(ok) {
+        QString name_axis = ui->choise_axis->currentText();
+        if (name_axis == "X") {
+            chart_epsilon->axisX()->setTitleFont(font);
+        } else if (name_axis == "Y") {
+            chart_epsilon->axisY()->setTitleFont(font);
+        }
+
+    }
+}
+
+
+void MainWindow::on_MajorEpsilonCount_valueChanged(int arg1) {
+    QMessageBox::information(this, "information", "Sorry, this feature is currently not available.");
+}
+
+
+void MainWindow::on_EpsilonMajorColor_clicked() {
+
+    QColor color = QColorDialog::getColor("#6CC4FF", this);
+    QString name_axis = ui->choise_axis->currentText();
+    if (color.isValid()) {
+        if (name_axis == "X") {
+            chart_epsilon->axisX()->setGridLineColor(color);
+        } else if (name_axis == "Y") {
+            chart_epsilon->axisY()->setGridLineColor(color);
+        }
+    }
+}
+
+
+void MainWindow::on_EpsilonMajorStyle_activated(int index) {
+    QString name_axis = ui->choise_axis->currentText();
+
+    QString style = ui->EpsilonMajorStyle->currentText();
+    QPen pen;
+
+    if (style == "SolidLine") {
+        pen.setStyle(Qt::SolidLine);
+    } else if (style == "DashLine") {
+        pen.setStyle(Qt::DashLine);
+    } else if (style == "DotLine") {
+        pen.setStyle(Qt::DotLine);
+    } else if (style == "DashDotLine") {
+        pen.setStyle(Qt::DashDotLine);
+    } else if (style == "DashDotDotLine") {
+        pen.setStyle(Qt::DashDotDotLine);
+    } else if (style == "NoPen") {
+        pen.setStyle(Qt::NoPen);
+    } else {
+        return;
+    }
+
+   if (name_axis == "X") {
+       pen.setColor(chart_epsilon->axisX()->gridLineColor());
+       chart_epsilon->axisX()->setGridLinePen(pen);
+   } else if (name_axis == "Y") {
+        pen.setColor(chart_epsilon->axisY()->gridLineColor());
+       chart_epsilon->axisY()->setGridLinePen(pen);
+   }
+}
+
+
+void MainWindow::on_EpsilonMinorColor_clicked() {
+    QColor color = QColorDialog::getColor("#6CC4FF", this);
+    QString name_axis = ui->choise_axis->currentText();
+
+    if (color.isValid()) {
+        if (name_axis == "X") {
+            chart_epsilon->axisX()->setMinorGridLineColor(color);
+        } else if (name_axis == "Y") {
+            chart_epsilon->axisY()->setMinorGridLineColor(color);
+        }
+    }
+}
+
+
+void MainWindow::on_MinorEpsilonCount_valueChanged(int arg1){
+    QMessageBox::information(this, "information", "Sorry, this feature is currently not available.");
+}
+
+
+void MainWindow::on_EpsilonMinorStyle_activated(int index) {
+    QString name_axis = ui->choise_axis->currentText();
+
+    QString style = ui->EpsilonMinorStyle->currentText();
+    QPen pen;
+
+    if (style == "SolidLine") {
+        pen.setStyle(Qt::SolidLine);
+    } else if (style == "DashLine") {
+        pen.setStyle(Qt::DashLine);
+    } else if (style == "DotLine") {
+        pen.setStyle(Qt::DotLine);
+    } else if (style == "DashDotLine") {
+        pen.setStyle(Qt::DashDotLine);
+    } else if (style == "DashDotDotLine") {
+        pen.setStyle(Qt::DashDotDotLine);
+    } else if (style == "NoPen") {
+        pen.setStyle(Qt::NoPen);
+    } else {
+        return;
+    }
+
+   if (name_axis == "X") {
+       pen.setColor(chart_epsilon->axisX()->minorGridLineColor());
+       chart_epsilon->axisX()->setMinorGridLinePen(pen);
+   } else if (name_axis == "Y") {
+       pen.setColor(chart_epsilon->axisY()->minorGridLineColor());
+       chart_epsilon->axisY()->setMinorGridLinePen(pen);
+   }
+}
+
+
+void MainWindow::on_EpsilonseriesColor_clicked() {
+    QColor color = QColorDialog::getColor("#808B96", this);
+    QString name_series = ui->EpsilonSeries->currentText();
+
+    if (color.isValid()) {
+        if (name_series == "Re(epsilon)") {
+            series_re_e->setColor(color);
+        } else if (name_series == "Im(epsilon)") {
+            series_im_e->setColor(color);
+        }
+    }
+}
+
+
+void MainWindow::on_EpsilonMarkerSize_valueChanged(int arg1) {
+
+    QString name_series = ui->EpsilonSeries->currentText();
+
+    if (name_series == "Re(epsilon)") {
+            series_re_e->setMarkerSize(arg1);
+     } else if (name_series == "Im(epsilon)") {
+            series_im_e->setMarkerSize(arg1);
+     }
+
+}
+
+
+void MainWindow::on_EpsilonMarkers_activated(int index) {
+    QString choise_shape = ui->EpsilonMarkers->currentText();
+    QScatterSeries::MarkerShape shape;
+    if(choise_shape == "Triangle") {
+        shape = QScatterSeries::MarkerShapeTriangle;
+    } else if (choise_shape == "Circle") {
+        shape = QScatterSeries::MarkerShapeCircle;
+    } else if (choise_shape == "Star") {
+        shape = QScatterSeries::MarkerShapeStar;
+    } else if (choise_shape == "Pentagon") {
+        shape = QScatterSeries::MarkerShapePentagon;
+    } else if (choise_shape == "Rectangle") {
+        shape = QScatterSeries::MarkerShapeRectangle;
+    } else if (choise_shape == "RotatedRectangle") {
+        shape = QScatterSeries::MarkerShapeRotatedRectangle;
+    } else {
+        return;
+    }
+
+    QString name_series = ui->EpsilonSeries->currentText();
+    if (name_series == "Re(epsilon)") {
+            series_re_e->setMarkerShape(shape);
+    } else if (name_series == "Im(epsilon)") {
+            series_im_e->setMarkerShape(shape);
+    }
+}
+
+
+void MainWindow::on_EpsilonSeries_activated(int index){
+    QString name_series = ui->EpsilonSeries->currentText();
+    int value = 12;
+    if (name_series == "Re(epsilon)") {
+            value = series_re_e->markerSize();
+    } else if (name_series == "Im(epsilon)") {
+            value = series_im_e->markerSize();
+    }
+    ui->EpsilonMarkerSize->setValue(value);
+}
+
+
+void MainWindow::on_EpsilonLegendShow_stateChanged(int arg1){
+    chart_epsilon->legend()->setVisible(arg1);
+}
+
+
+void MainWindow::on_EpsilonLegendFont_clicked() {
+    bool ok;
+    QFont font = QFontDialog::getFont(&ok, QFont("Embria"), this);
+
+    if(ok) {
+
+        chart_epsilon->legend()->setFont(font);
+    }
+}
+
+
+void MainWindow::on_SettingsChartCoul_clicked() {
+    hidden_setting_coul = hidden_setting_coul? false : true;
+    ui->SettingChartCoul->setHidden(hidden_setting_coul);
+}
+
+
+void MainWindow::on_TitleChartCoul_textChanged(const QString &arg1) {
+    chart_coul->setTitle(arg1);
+}
+
+
+void MainWindow::on_FontTitleChartCoul_clicked() {
+    bool ok;
+    QFont font = QFontDialog::getFont(&ok, QFont("Embria"), this);
+
+    if(ok) {
+        chart_coul->setTitleFont(font);
+    }
+}
+
+
+void MainWindow::on_SettingsHist_clicked() {
+    hidden_settings_hist = hidden_settings_hist? false : true;
+    ui->SettingsHistFrame->setHidden(hidden_settings_hist);
 }
 

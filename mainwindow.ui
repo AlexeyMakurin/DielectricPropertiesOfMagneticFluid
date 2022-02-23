@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1028</width>
-    <height>678</height>
+    <height>794</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -189,7 +189,7 @@
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="elideMode">
            <enum>Qt::ElideNone</enum>
@@ -218,7 +218,7 @@
              <widget class="QFrame" name="SetingChartEpsilon">
               <property name="maximumSize">
                <size>
-                <width>200</width>
+                <width>250</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -230,84 +230,505 @@
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_5">
                <item>
-                <widget class="QFrame" name="frame_3">
-                 <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
+                <widget class="QGroupBox" name="groupBox_5">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>65</height>
+                  </size>
                  </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
+                 <property name="title">
+                  <string>Title</string>
                  </property>
                  <layout class="QHBoxLayout" name="horizontalLayout_7">
                   <item>
-                   <widget class="QLabel" name="label">
-                    <property name="font">
-                     <font>
-                      <pointsize>12</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Tittle</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
                    <widget class="QLineEdit" name="ChartEpsilonTittle"/>
                   </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="QFrame" name="frame_4">
-                 <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_8">
                   <item>
-                   <widget class="QLabel" name="label_2">
-                    <property name="font">
-                     <font>
-                      <family>Ebrima</family>
-                      <pointsize>12</pointsize>
-                     </font>
-                    </property>
+                   <widget class="QPushButton" name="EpsilonTitleFont">
                     <property name="text">
-                     <string>axisX name</string>
+                     <string>Font</string>
                     </property>
                    </widget>
                   </item>
-                  <item>
-                   <widget class="QLineEdit" name="ChartEpsilonAxisXname"/>
-                  </item>
                  </layout>
                 </widget>
                </item>
                <item>
-                <widget class="QFrame" name="frame_2">
-                 <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
+                <widget class="QGroupBox" name="Axis">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
                  </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>225</height>
+                  </size>
                  </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_9">
-                  <item>
+                 <property name="title">
+                  <string>Axis</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout">
+                  <item row="4" column="1">
+                   <widget class="QLineEdit" name="ChartEpsilonAxisName">
+                    <property name="maximumSize">
+                     <size>
+                      <width>75</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="13" column="1">
+                   <widget class="QSpinBox" name="MinorEpsilonCount">
+                    <property name="maximumSize">
+                     <size>
+                      <width>75</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="10" column="0">
+                   <widget class="QLabel" name="label_5">
+                    <property name="text">
+                     <string>Major ticks</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="11" column="1">
+                   <widget class="QComboBox" name="EpsilonMajorStyle">
+                    <property name="minimumSize">
+                     <size>
+                      <width>138</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>...</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>NoPen</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>DotLine</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>SolidLine</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>DashLine</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>DashDotLine</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>DashDotDotLine</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="5" column="0" rowspan="2" colspan="4">
+                   <widget class="Line" name="line_2">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="13" column="0">
+                   <widget class="QLabel" name="label_7">
+                    <property name="text">
+                     <string>Minor ticks </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="10" column="1">
+                   <widget class="QSpinBox" name="MajorEpsilonCount">
+                    <property name="maximumSize">
+                     <size>
+                      <width>75</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
                    <widget class="QLabel" name="label_3">
-                    <property name="font">
-                     <font>
-                      <family>Ebrima</family>
-                      <pointsize>12</pointsize>
-                     </font>
-                    </property>
                     <property name="text">
-                     <string>axisY name</string>
+                     <string>Axis</string>
                     </property>
                    </widget>
                   </item>
-                  <item>
-                   <widget class="QLineEdit" name="ChartEpsilonAxisYname"/>
+                  <item row="11" column="0">
+                   <widget class="QLabel" name="label_4">
+                    <property name="text">
+                     <string>Style</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="choise_axis">
+                    <property name="minimumSize">
+                     <size>
+                      <width>100</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>X</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Y</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_2">
+                    <property name="text">
+                     <string>Name</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="3">
+                   <widget class="QPushButton" name="EpsilonFontAxis">
+                    <property name="maximumSize">
+                     <size>
+                      <width>75</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>Font Name</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="12" column="0" colspan="4">
+                   <widget class="Line" name="line_3">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="14" column="0">
+                   <widget class="QLabel" name="label_6">
+                    <property name="text">
+                     <string>Style</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="14" column="1">
+                   <widget class="QComboBox" name="EpsilonMinorStyle">
+                    <property name="minimumSize">
+                     <size>
+                      <width>138</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>...</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>DotLine</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>SolidLine</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>DashLine</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>DashDotLine</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>DashDotDotLine</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>NoPen</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="10" column="3">
+                   <widget class="QPushButton" name="EpsilonMajorColor">
+                    <property name="maximumSize">
+                     <size>
+                      <width>75</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>Color</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="13" column="3">
+                   <widget class="QPushButton" name="EpsilonMinorColor">
+                    <property name="maximumSize">
+                     <size>
+                      <width>75</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>Color</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="groupBox_3">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>125</height>
+                  </size>
+                 </property>
+                 <property name="title">
+                  <string>Series</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_2">
+                  <item row="4" column="1">
+                   <widget class="QComboBox" name="EpsilonMarkers">
+                    <item>
+                     <property name="text">
+                      <string>...</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Triangle</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Circle</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Star</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Pentagon</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Rectangle</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>RotatedRectangle</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_11">
+                    <property name="text">
+                     <string> Markers shape</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QComboBox" name="EpsilonSeries">
+                    <item>
+                     <property name="text">
+                      <string>Re(epsilon)</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Im(epsilon)</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QPushButton" name="EpsilonseriesColor">
+                    <property name="text">
+                     <string>Color</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="1">
+                   <widget class="QSpinBox" name="EpsilonMarkerSize"/>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="label">
+                    <property name="text">
+                     <string>Size</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="groupBox_4">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>190</height>
+                  </size>
+                 </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="title">
+                  <string>Legend</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_3">
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="label_12">
+                    <property name="maximumSize">
+                     <size>
+                      <width>30</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>HPos</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="7" column="0">
+                   <widget class="QLabel" name="label_15">
+                    <property name="text">
+                     <string>Height</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QPushButton" name="EpsilonLegendFont">
+                    <property name="minimumSize">
+                     <size>
+                      <width>85</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>Font legend</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="7" column="1">
+                   <widget class="QSpinBox" name="EpsilonLegend_w"/>
+                  </item>
+                  <item row="5" column="1">
+                   <widget class="QSpinBox" name="EpsilonLegend_v">
+                    <property name="minimumSize">
+                     <size>
+                      <width>85</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>75</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QCheckBox" name="EpsilonLegendShow">
+                    <property name="text">
+                     <string>Show</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="0">
+                   <widget class="QLabel" name="label_13">
+                    <property name="text">
+                     <string>VPos</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="1">
+                   <widget class="QSpinBox" name="EpsilonLegend_h">
+                    <property name="minimumSize">
+                     <size>
+                      <width>85</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="8" column="0">
+                   <widget class="QLabel" name="label_14">
+                    <property name="text">
+                     <string>Width</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="8" column="1">
+                   <widget class="QSpinBox" name="EpsilonLegend_he"/>
                   </item>
                  </layout>
                 </widget>
@@ -329,7 +750,7 @@
                  <item>
                   <widget class="QPushButton" name="setting_ChartEpsilon">
                    <property name="text">
-                    <string>setting</string>
+                    <string>settings</string>
                    </property>
                   </widget>
                  </item>
@@ -353,15 +774,254 @@
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
+             <widget class="QFrame" name="SettingChartCoul">
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <item>
+                <widget class="QGroupBox" name="groupBox_6">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>65</height>
+                  </size>
+                 </property>
+                 <property name="title">
+                  <string>Title</string>
+                 </property>
+                 <layout class="QHBoxLayout" name="horizontalLayout_9">
+                  <item>
+                   <widget class="QLineEdit" name="TitleChartCoul"/>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="FontTitleChartCoul">
+                    <property name="text">
+                     <string>Font</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="groupBox_7">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>245</height>
+                  </size>
+                 </property>
+                 <property name="title">
+                  <string>Axis</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_4">
+                  <item row="0" column="0" colspan="6">
+                   <widget class="QComboBox" name="comboBox">
+                    <item>
+                     <property name="text">
+                      <string>X</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Y</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_9">
+                    <property name="text">
+                     <string>Name</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="5">
+                   <widget class="QPushButton" name="pushButton_2">
+                    <property name="text">
+                     <string>Font</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0" colspan="6">
+                   <widget class="Line" name="line_4">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0" colspan="3">
+                   <widget class="QLabel" name="label_8">
+                    <property name="text">
+                     <string>Major ticks</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="3" colspan="3">
+                   <widget class="QPushButton" name="pushButton_3">
+                    <property name="text">
+                     <string>Color</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0" colspan="2">
+                   <widget class="QLabel" name="label_10">
+                    <property name="text">
+                     <string>Style</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="0" colspan="6">
+                   <widget class="Line" name="line_5">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="0" colspan="3">
+                   <widget class="QLabel" name="label_16">
+                    <property name="text">
+                     <string>Minor ticks</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="7" column="0" colspan="2">
+                   <widget class="QLabel" name="label_17">
+                    <property name="text">
+                     <string>Style</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="7" column="3" colspan="3">
+                   <widget class="QComboBox" name="comboBox_3">
+                    <property name="minimumSize">
+                     <size>
+                      <width>138</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="3" colspan="3">
+                   <widget class="QComboBox" name="comboBox_2">
+                    <property name="minimumSize">
+                     <size>
+                      <width>138</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="3" colspan="3">
+                   <widget class="QPushButton" name="pushButton_4">
+                    <property name="text">
+                     <string>Color</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1" colspan="4">
+                   <widget class="QLineEdit" name="lineEdit"/>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="groupBox_8">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>125</height>
+                  </size>
+                 </property>
+                 <property name="title">
+                  <string>Series</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_5">
+                  <item row="0" column="0" colspan="2">
+                   <widget class="QPushButton" name="pushButton">
+                    <property name="text">
+                     <string>Color</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_18">
+                    <property name="text">
+                     <string>Markers shape</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QComboBox" name="comboBox_4"/>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_19">
+                    <property name="text">
+                     <string>Size</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QSpinBox" name="spinBox"/>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
              <layout class="QVBoxLayout" name="coulcoulLayout">
               <property name="sizeConstraint">
                <enum>QLayout::SetNoConstraint</enum>
               </property>
               <item>
-               <widget class="QPushButton" name="export_coul">
-                <property name="text">
-                 <string>export</string>
+               <widget class="QFrame" name="panel_coul">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
                 </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <item>
+                  <widget class="QPushButton" name="SettingsChartCoul">
+                   <property name="text">
+                    <string>settings</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="export_coul">
+                   <property name="text">
+                    <string>export</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
@@ -374,12 +1034,62 @@
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
+             <widget class="QFrame" name="SettingsHistFrame">
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_7">
+               <item>
+                <widget class="QGroupBox" name="groupBox_9">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="title">
+                  <string>Title</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_6">
+                  <item row="0" column="1">
+                   <widget class="QLineEdit" name="lineEdit_2"/>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QPushButton" name="pushButton_5">
+                    <property name="text">
+                     <string>Font</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
              <layout class="QVBoxLayout" name="distributionLayout">
               <property name="sizeConstraint">
                <enum>QLayout::SetNoConstraint</enum>
               </property>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item>
+                 <widget class="QPushButton" name="SettingsHist">
+                  <property name="text">
+                   <string>settings</string>
+                  </property>
+                 </widget>
+                </item>
                 <item>
                  <widget class="QPushButton" name="export_dist">
                   <property name="text">
