@@ -44,8 +44,6 @@ private slots:
 
     void on_plotDistribution_clicked();
 
-    void on_setting_ChartEpsilon_clicked();
-
     void on_additional_quantities_clicked();
 
     void on_clear_clicked();
@@ -54,11 +52,6 @@ private slots:
 
     void on_save_clicked();
 
-    void on_export_dist_clicked();
-
-    void on_export_coul_clicked();
-
-    void on_export_epsilon_clicked();
 
     void on_lineEdit_C0_textChanged(const QString &arg1);
 
@@ -68,47 +61,31 @@ private slots:
 
     void on_lineEdit_temp_textChanged(const QString &arg1);
 
-    void on_ChartEpsilonTittle_textChanged(const QString &arg1);
+    void on_ChartsSettingsButton_clicked();
 
-    void on_ChartEpsilonAxisName_textChanged(const QString &arg1);
+    void on_Title_textChanged(const QString &arg1);
 
+    void on_TitleFont_clicked();
 
-    void on_EpsilonTitleFont_clicked();
+    void on_ChartAxisName_textChanged(const QString &arg1);
 
-    void on_EpsilonFontAxis_clicked();
+    void on_FontAxis_clicked();
 
-    void on_MajorEpsilonCount_valueChanged(int arg1);
+    void on_MajorFont_clicked();
 
-    void on_EpsilonMajorColor_clicked();
+    void on_MajorColor_clicked();
 
+    void on_MinorColor_clicked();
 
-    void on_EpsilonMajorStyle_activated(int index);
+    void on_SeriesColor_clicked();
 
-    void on_EpsilonMinorColor_clicked();
+    void on_SeriesName_textChanged(const QString &arg1);
 
-    void on_MinorEpsilonCount_valueChanged(int arg1);
+    void on_LegendFont_clicked();
 
-    void on_EpsilonMinorStyle_activated(int index);
+    void on_MarkerSize_valueChanged(int arg1);
 
-    void on_EpsilonseriesColor_clicked();
-
-    void on_EpsilonMarkerSize_valueChanged(int arg1);
-
-    void on_EpsilonMarkers_activated(int index);
-
-    void on_EpsilonSeries_activated(int index);
-
-    void on_EpsilonLegendShow_stateChanged(int arg1);
-
-    void on_EpsilonLegendFont_clicked();
-
-    void on_SettingsChartCoul_clicked();
-
-    void on_TitleChartCoul_textChanged(const QString &arg1);
-
-    void on_FontTitleChartCoul_clicked();
-
-    void on_SettingsHist_clicked();
+    void on_LegendShow_stateChanged(int arg1);
 
 private:
     Ui::MainWindow *ui;
@@ -126,33 +103,54 @@ private:
     QChart *chart_coul = new QChart();
     QChartView *view_coul = new QChartView();
 
-    //Distribution
-    QBarSeries *series_dist = new QBarSeries();
-    QBarCategoryAxis *axisX = new QBarCategoryAxis();
-    QValueAxis *axisY = new QValueAxis();
-    QChart *chart_dist = new QChart();
-    QChartView *view_dist = new QChartView();
-
-    //Other values
-    qreal x_max_e = 11;
-    qreal y_max_e = 11;
-    qreal x_max_coul = 11;
-    qreal y_max_coul = 11;
 
     bool hidden_frame = true;
-    bool hidden_setting_e = true;
-    bool hidden_setting_coul = true;
-    bool hidden_settings_hist = true;
+    bool hidden_settings = true;
+
     bool act_cell = true;
     bool align = false;
+
+    std::map<Qt::PenStyle, QString> line_styles = {
+        {Qt::SolidLine, "SolidLine"},
+        {Qt::DashLine, "DashLine"},
+        {Qt::DotLine, "DotLine"},
+        {Qt::DashDotLine, "DashDotLine"},
+        {Qt::DashDotDotLine, "DashDotDotLine"},
+        {Qt::NoPen, "NoPen"}
+    };
+
+    std::map<QScatterSeries::MarkerShape, QString> marker_shape = {
+        {QScatterSeries::MarkerShapeTriangle, "Triangle"},
+        {QScatterSeries::MarkerShapeCircle, "Circle"},
+        {QScatterSeries::MarkerShapeStar, "Star"},
+        {QScatterSeries::MarkerShapePentagon, "Pentagon"},
+        {QScatterSeries::MarkerShapeRectangle, "Rectangle"},
+        {QScatterSeries::MarkerShapeRotatedRectangle, "RotatedRectangle"}
+    };
+
+
+    std::map<int, QChart*> charts = {
+        {0, chart_epsilon},
+        {1, chart_coul},
+
+    };
+
+    std::map<QChart*, QList<QScatterSeries*>> map_ScatterSeries = {
+        {chart_epsilon, {series_re_e, series_im_e}},
+        {chart_coul, {series_coul}},
+
+    };
+
+    std::map<QChart*, QList<QBarSeries*>> map_BarSeries = {};
+
 
     void add_point(QScatterSeries *series, std::map<int, double>& map1,  std::map<int, double>& map2,
                    const int& row, const double& value1=0, const double& value2=0);
 
-    void AutoScale(QChart *chart, QScatterSeries *series, double& xMax, double& yMax);
+    void AutoScale(QChart *chart, QList<QScatterSeries*> &list_series) ;
 
     void CreateChart(QLayout *layout, QChartView *view, QChart *chart, std::vector<QScatterSeries*> series,
-                     const QString& ax, const QString& ay, qreal& x_max, qreal& y_max, bool legend=false);
+                     const QString& ax, const QString& ay, bool legend=false);
 
     void allowed_addition(const double& item, const int& row, const int& col);
     void addition(const std::map<int, double>& fiel, const int& row, const int& col);
