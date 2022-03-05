@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1114</width>
-    <height>850</height>
+    <height>809</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -179,7 +179,7 @@
           <property name="minimumSize">
            <size>
             <width>265</width>
-            <height>650</height>
+            <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -203,7 +203,7 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>65</height>
+               <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -234,7 +234,7 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>210</height>
+               <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -253,6 +253,82 @@
               <bool>false</bool>
              </property>
              <layout class="QGridLayout" name="gridLayout">
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_5">
+                <property name="minimumSize">
+                 <size>
+                  <width>60</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Major ticks</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="ChartAxisName">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QComboBox" name="MajorStyle">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>NoPen</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>DotLine</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>SolidLine</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>DashLine</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>DashDotLine</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>DashDotDotLine</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="6" column="0" colspan="9">
+               <widget class="Line" name="line_3">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
               <item row="5" column="8">
                <widget class="QPushButton" name="MajorColor">
                 <property name="minimumSize">
@@ -272,8 +348,8 @@
                 </property>
                </widget>
               </item>
-              <item row="4" column="0">
-               <widget class="QLabel" name="label_5">
+              <item row="7" column="0">
+               <widget class="QLabel" name="label_7">
                 <property name="minimumSize">
                  <size>
                   <width>60</width>
@@ -281,26 +357,92 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>Major ticks</string>
+                 <string>Minor ticks </string>
                 </property>
                </widget>
               </item>
-              <item row="1" column="8">
-               <widget class="QPushButton" name="FontAxis">
+              <item row="8" column="1">
+               <widget class="QComboBox" name="MinorStyle">
                 <property name="minimumSize">
                  <size>
-                  <width>50</width>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>DotLine</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>SolidLine</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>DashLine</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>DashDotLine</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>DashDotDotLine</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>NoPen</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>35</width>
                   <height>0</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>75</width>
+                  <width>35</width>
                   <height>16777215</height>
                  </size>
                 </property>
                 <property name="text">
-                 <string>Font</string>
+                 <string>Name</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="minimumSize">
+                 <size>
+                  <width>25</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>25</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Axis</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>Style</string>
                 </property>
                </widget>
               </item>
@@ -308,6 +450,13 @@
                <widget class="Line" name="line_2">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="label_4">
+                <property name="text">
+                 <string>Style</string>
                 </property>
                </widget>
               </item>
@@ -350,100 +499,63 @@
                 </item>
                </widget>
               </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="ChartAxisName">
-                <property name="minimumSize">
-                 <size>
-                  <width>120</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>120</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="0">
-               <widget class="QLabel" name="label_7">
-                <property name="minimumSize">
-                 <size>
-                  <width>60</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>Minor ticks </string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_2">
-                <property name="minimumSize">
-                 <size>
-                  <width>35</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>35</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>Name</string>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="1">
-               <widget class="QComboBox" name="MajorStyle">
-                <property name="minimumSize">
-                 <size>
-                  <width>120</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>NoPen</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>DotLine</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>SolidLine</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>DashLine</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>DashDotLine</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>DashDotDotLine</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
               <item row="7" column="8">
                <widget class="QPushButton" name="MinorFont">
                 <property name="minimumSize">
                  <size>
                   <width>50</width>
                   <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Font</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QSpinBox" name="MinorCount">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QSpinBox" name="MajorCount">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="8">
+               <widget class="QPushButton" name="FontAxis">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>16777215</height>
                  </size>
                 </property>
                 <property name="text">
@@ -470,118 +582,6 @@
                 </property>
                </widget>
               </item>
-              <item row="7" column="1">
-               <widget class="QSpinBox" name="MinorCount">
-                <property name="minimumSize">
-                 <size>
-                  <width>75</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>75</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="8" column="0">
-               <widget class="QLabel" name="label_6">
-                <property name="text">
-                 <string>Style</string>
-                </property>
-               </widget>
-              </item>
-              <item row="8" column="1">
-               <widget class="QComboBox" name="MinorStyle">
-                <property name="minimumSize">
-                 <size>
-                  <width>120</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>DotLine</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>SolidLine</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>DashLine</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>DashDotLine</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>DashDotDotLine</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>NoPen</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_3">
-                <property name="minimumSize">
-                 <size>
-                  <width>25</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>25</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>Axis</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="1">
-               <widget class="QSpinBox" name="MajorCount">
-                <property name="minimumSize">
-                 <size>
-                  <width>75</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>75</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="0" colspan="9">
-               <widget class="Line" name="line_3">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="0">
-               <widget class="QLabel" name="label_4">
-                <property name="text">
-                 <string>Style</string>
-                </property>
-               </widget>
-              </item>
              </layout>
             </widget>
            </item>
@@ -590,35 +590,26 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>125</height>
+               <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>145</height>
+               <height>150</height>
               </size>
              </property>
              <property name="title">
               <string>Series</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_2">
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_8">
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="SeriesName">
                 <property name="minimumSize">
                  <size>
-                  <width>35</width>
+                  <width>120</width>
                   <height>0</height>
                  </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>35</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>Name</string>
                 </property>
                </widget>
               </item>
@@ -641,6 +632,25 @@
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QPushButton" name="SeriesColor">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Color</string>
                 </property>
                </widget>
               </item>
@@ -694,26 +704,6 @@
                 </item>
                </widget>
               </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="SeriesName">
-                <property name="minimumSize">
-                 <size>
-                  <width>120</width>
-                  <height>0</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QSpinBox" name="MarkerSize">
-                <property name="wrapping">
-                 <bool>false</bool>
-                </property>
-                <property name="suffix">
-                 <string/>
-                </property>
-               </widget>
-              </item>
               <item row="0" column="0" colspan="2">
                <widget class="QComboBox" name="ChoiseSeries">
                 <property name="minimumSize">
@@ -730,22 +720,32 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="2">
-               <widget class="QPushButton" name="SeriesColor">
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_8">
                 <property name="minimumSize">
                  <size>
-                  <width>50</width>
+                  <width>35</width>
                   <height>0</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>75</width>
+                  <width>35</width>
                   <height>16777215</height>
                  </size>
                 </property>
                 <property name="text">
-                 <string>Color</string>
+                 <string>Name</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QSpinBox" name="MarkerSize">
+                <property name="wrapping">
+                 <bool>false</bool>
+                </property>
+                <property name="suffix">
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -757,13 +757,13 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>125</height>
+               <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>180</height>
+               <height>160</height>
               </size>
              </property>
              <property name="layoutDirection">
@@ -773,27 +773,17 @@
               <string>Legend</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_3">
-              <item row="8" column="0">
-               <widget class="QLabel" name="label_14">
-                <property name="text">
-                 <string>Width</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="2">
+              <item row="6" column="2">
                <widget class="QSpinBox" name="Legend_v">
                 <property name="minimumSize">
                  <size>
-                  <width>85</width>
+                  <width>0</width>
                   <height>0</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>75</width>
+                  <width>60</width>
                   <height>16777215</height>
                  </size>
                 </property>
@@ -802,42 +792,13 @@
                 </property>
                </widget>
               </item>
-              <item row="6" column="2">
-               <widget class="QSpinBox" name="Legend_h">
-                <property name="minimumSize">
-                 <size>
-                  <width>85</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>80</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
+              <item row="0" column="0">
                <widget class="QCheckBox" name="LegendShow">
                 <property name="text">
                  <string>Show</string>
                 </property>
                 <property name="checked">
                  <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="0">
-               <widget class="QLabel" name="label_15">
-                <property name="text">
-                 <string>Height</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -857,23 +818,27 @@
                 </property>
                </widget>
               </item>
-              <item row="6" column="0">
-               <widget class="QLabel" name="label_13">
+              <item row="6" column="3">
+               <widget class="QLabel" name="label_14">
                 <property name="text">
-                 <string>VPos</string>
+                 <string>Width</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
-              <item row="7" column="2">
-               <widget class="QSpinBox" name="Legend_he"/>
+              <item row="5" column="3">
+               <widget class="QLabel" name="label_15">
+                <property name="text">
+                 <string>Height</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                </property>
+               </widget>
               </item>
-              <item row="8" column="2">
-               <widget class="QSpinBox" name="Legend_w"/>
-              </item>
-              <item row="2" column="2">
+              <item row="0" column="2">
                <widget class="QPushButton" name="LegendFont">
                 <property name="minimumSize">
                  <size>
@@ -886,6 +851,54 @@
                 </property>
                </widget>
               </item>
+              <item row="6" column="4">
+               <widget class="QSpinBox" name="Legend_w"/>
+              </item>
+              <item row="5" column="4">
+               <widget class="QSpinBox" name="Legend_he">
+                <property name="minimumSize">
+                 <size>
+                  <width>60</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="label_13">
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>VPos</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2">
+               <widget class="QSpinBox" name="Legend_h">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>
@@ -894,6 +907,12 @@
         </item>
         <item>
          <widget class="QFrame" name="FrameCharts">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -913,7 +932,7 @@
            <item>
             <widget class="QFrame" name="panel">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -984,7 +1003,7 @@
               <enum>QTabWidget::Rounded</enum>
              </property>
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <property name="elideMode">
               <enum>Qt::ElideNone</enum>
@@ -1049,6 +1068,9 @@
         </item>
         <item>
          <layout class="QHBoxLayout" name="menuTableLayou">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetNoConstraint</enum>
+          </property>
           <item>
            <widget class="QPushButton" name="additional_quantities">
             <property name="font">
@@ -1116,6 +1138,9 @@
         </item>
         <item>
          <layout class="QVBoxLayout" name="dataTablelLayout">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetNoConstraint</enum>
+          </property>
           <item>
            <widget class="QTableWidget" name="tableWidget">
             <property name="font">

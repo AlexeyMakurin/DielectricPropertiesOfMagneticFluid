@@ -27,13 +27,14 @@ std::pair<std::map<double, double>,  std::map<double, int>> MagneticFluid::inter
 
     std::map<double, int> rows;
 
-    for (const auto& [key, value]: frequency) {
+    for (const auto& [row, value]: frequency) {
+        if (!value) { continue;}
         double r = 0.5 * cbrt(2 * k * T_ / (value * eta_ * pi * 1e+3)) * 1e+9;
-        double area = 0.5 * pi * im_epsilon[key] * im_epsilon[key];
+        double area = 0.5 * pi * im_epsilon[row] * im_epsilon[row];
 
         total_area += area;
         radius_and_concentration[r] = area;
-        rows[r] = key;
+        rows[r] = row;
     }
 
     int count = round(1 + 3.322 * log10(radius_and_concentration.size()));

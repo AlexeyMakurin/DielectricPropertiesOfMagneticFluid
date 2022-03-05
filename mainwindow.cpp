@@ -36,19 +36,20 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableWidget->setItemPrototype(protoitem);
     ///
 
-    series_re_e->setName("Re(epsilon)");
-    series_im_e->setName("Im(epsilon)");
+    ///Требуется построить график зависимости действительной и мнимой части диэлектрической проницаемости (epsilon) взависимости от частоты
+    ///Этот график будет отображаться в первой вкладке TabWidgets (Это Важно!)
+    CreateScatterChart(ui->epsilonLayout, 0, "frequency (kHz)", "epsilon", {"Re(epsilon)", "Im(epsilon)"});
 
-    CreateChart(ui->epsilonLayout, view_epsilon, chart_epsilon, {series_re_e, series_im_e}, "frequency (kHz)", "epsilon", true);
-    CreateChart(ui->coulcoulLayout, view_coul, chart_coul, {series_coul}, "Re(epsiloin)", "Im(epsilon)");
-
+    ///Во-второй вкладке отображается график зависимости мнимой части от действительной части диэлектрической проницаемости
+    CreateScatterChart(ui->coulcoulLayout, 1, "Re(epsiloin)", "Im(epsilon)", {""});
 
     int current_index = ui->tabWidget->currentIndex();
 
     QObject::connect(ui->tabWidget, &QTabWidget::currentChanged, [&](int index){
-        ui->MarkersView->setHidden(false);
+        ui->MarkersView->setEnabled(true);
+
         QString axis = ui->ChoiseAxis->currentText();
-        ui->Title->setText(charts[index]->title());
+        ui->Title->setText(charts[index]->chart()->title());
 
         ui->ChoiseAxis->currentTextChanged(axis);
 
@@ -57,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent)
         ui->ChoiseSeries->clear();
         ui->ChoiseSeries->blockSignals(false);
 
-        for(const auto& item: charts[index]->series()) {
+        for(const auto& item: charts[index]->chart()->series()) {
                 if (item->name().isEmpty()) {
                     item->setName("series " + QString::number(count));
                 }
@@ -66,21 +67,35 @@ MainWindow::MainWindow(QWidget *parent)
                 ++count;
         }
 
-        ui->LegendShow->setChecked(charts[index]->legend()->isVisible());
+        ui->LegendShow->setChecked(charts[index]->chart()->legend()->isVisible());
 
     });
 
 
     QObject::connect(ui->ChoiseAxis, &QComboBox::currentTextChanged, [&](const QString &axis) {
         int index = ui->tabWidget->currentIndex();
-        if (axis == "X" ) {
-            ui->ChartAxisName->setText(charts[index]->axisX()->titleText());
-            ui->MajorStyle->setCurrentText(line_styles[charts[index]->axisX()->gridLinePen().style()]);
-            ui->MinorStyle->setCurrentText(line_styles[charts[index]->axisX()->minorGridLinePen().style()]);
+
+        ui->MinorColor->setEnabled(true);
+        ui->MinorCount->setEnabled(true);
+        ui->MinorFont->setEnabled(true);
+        ui->MinorStyle->setEnabled(true);
+
+        if (axis == "X") {
+            ui->ChartAxisName->setText(charts[index]->chart()->axisX()->titleText());
+            ui->MajorStyle->setCurrentText(line_styles[charts[index]->chart()->axisX()->gridLinePen().style()]);
+            ui->MinorStyle->setCurrentText(line_styles[charts[index]->chart()->axisX()->minorGridLinePen().style()]);
+
+            if (charts[index]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeBar) {
+                ui->MinorColor->setEnabled(false);
+                ui->MinorCount->setEnabled(false);
+                ui->MinorFont->setEnabled(false);
+                ui->MinorStyle->setEnabled(false);
+            }
+
         } else if (axis == "Y") {
-            ui->ChartAxisName->setText(charts[index]->axisY()->titleText());
-            ui->MajorStyle->setCurrentText(line_styles[charts[index]->axisY()->gridLinePen().style()]);
-            ui->MinorStyle->setCurrentText(line_styles[charts[index]->axisY()->minorGridLinePen().style()]);
+            ui->ChartAxisName->setText(charts[index]->chart()->axisY()->titleText());
+            ui->MajorStyle->setCurrentText(line_styles[charts[index]->chart()->axisY()->gridLinePen().style()]);
+            ui->MinorStyle->setCurrentText(line_styles[charts[index]->chart()->axisY()->minorGridLinePen().style()]);
         }
     });
 
@@ -96,11 +111,11 @@ MainWindow::MainWindow(QWidget *parent)
         int index = ui->tabWidget->currentIndex();
         QString axis = ui->ChoiseAxis->currentText();
         if (axis == "X") {
-            pen.setColor(charts[index]->axisX()->gridLineColor());
-            charts[index]->axisX()->setGridLinePen(pen);
+            pen.setColor(charts[index]->chart()->axisX()->gridLineColor());
+            charts[index]->chart()->axisX()->setGridLinePen(pen);
         } else if (axis == "Y") {
-            pen.setColor(charts[index]->axisY()->gridLineColor());
-            charts[index]->axisY()->setGridLinePen(pen);
+            pen.setColor(charts[index]->chart()->axisY()->gridLineColor());
+            charts[index]->chart()->axisY()->setGridLinePen(pen);
         }
        });
 
@@ -116,11 +131,11 @@ MainWindow::MainWindow(QWidget *parent)
         int index = ui->tabWidget->currentIndex();
         QString axis = ui->ChoiseAxis->currentText();
         if (axis == "X") {
-            pen.setColor(charts[index]->axisX()->minorGridLineColor());
-            charts[index]->axisX()->setMinorGridLinePen(pen);
+            pen.setColor(charts[index]->chart()->axisX()->minorGridLineColor());
+            charts[index]->chart()->axisX()->setMinorGridLinePen(pen);
         } else if (axis == "Y") {
-            pen.setColor(charts[index]->axisY()->minorGridLineColor());
-            charts[index]->axisY()->setMinorGridLinePen(pen);
+            pen.setColor(charts[index]->chart()->axisY()->minorGridLineColor());
+            charts[index]->chart()->axisY()->setMinorGridLinePen(pen);
         }
        });
 
@@ -130,7 +145,7 @@ MainWindow::MainWindow(QWidget *parent)
 
         int index = ui->tabWidget->currentIndex();
 
-        if (charts[index]->series()[0]->type() == QAbstractSeries::SeriesTypeScatter) {
+        if (charts[index]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeScatter) {
 
             QScatterSeries::MarkerShape shape;
             for (auto& item: map_ScatterSeries[charts[index]]) {
@@ -141,13 +156,15 @@ MainWindow::MainWindow(QWidget *parent)
             }
             ui->MarkersView->setCurrentText(marker_shape[shape]);
 
-        } else if (charts[index]->series()[0]->type() == QAbstractSeries::SeriesTypeBar) {
+        } else if (charts[index]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeBar) {
             for (auto& item: map_BarSeries[charts[index]]) {
                 if (item->name() == name) {
                     ui->MarkerSize->setValue(item->barWidth() * 100);
                 }
             }
-            ui->MarkersView->setHidden(true);
+
+            ui->MarkersView->setDisabled(true);
+
         }
 
 
@@ -179,11 +196,11 @@ MainWindow::MainWindow(QWidget *parent)
         for (auto& series: item.second) {
 
             QObject::connect(series, &QScatterSeries::pointAdded, [&](){
-                AutoScale(item.first, item.second);
+                AutoScale(item.first->chart(), item.second);
             });
 
             QObject::connect(series, &QScatterSeries::pointReplaced, [&](){
-                AutoScale(item.first, item.second);
+                AutoScale(item.first->chart(), item.second);
             });
         }
     }
@@ -196,20 +213,29 @@ MainWindow::MainWindow(QWidget *parent)
             ui->tableWidget->insertRow(ui->tableWidget->rowCount());
         }
 
+
+
         switch (col) {
 
         case 0:
-            add_point(series_re_e, mf.frequency, mf.re_epsilon, row, value);
-            add_point(series_im_e, mf.frequency, mf.im_epsilon, row, value);
+            add_point(map_ScatterSeries[charts[0]][0], mf.frequency, mf.re_epsilon, row, value);
+            add_point(map_ScatterSeries[charts[0]][1], mf.frequency, mf.im_epsilon, row, value);
+
+            //add_point(series_re_e, mf.frequency, mf.re_epsilon, row, value);
+            //add_point(series_im_e, mf.frequency, mf.im_epsilon, row, value);
             mf.frequency[row] = value;
             break;
 
         case 1:
-            add_point(series_re_e, mf.re_epsilon, mf.frequency, row, 0, mf.ReEpsilon(value));
+            add_point(map_ScatterSeries[charts[0]][0], mf.re_epsilon, mf.frequency, row, 0, mf.ReEpsilon(value));
+            //add_point(series_re_e, mf.re_epsilon, mf.frequency, row, 0, mf.ReEpsilon(value));
 
             if (mf.tan_d[row]) {
-                add_point(series_im_e, mf.capacity, mf.frequency, row, 0, mf.ImEpsilon(value, mf.tan_d[row]));
-                add_point(series_coul, mf.re_epsilon, mf.tan_d, row, mf.ReEpsilon(value), mf.ImEpsilon(value, mf.tan_d[row]));
+                add_point(map_ScatterSeries[charts[0]][1], mf.capacity, mf.frequency, row, 0, mf.ImEpsilon(value, mf.tan_d[row]));
+                add_point(map_ScatterSeries[charts[1]][0], mf.re_epsilon, mf.tan_d, row, mf.ReEpsilon(value), mf.ImEpsilon(value, mf.tan_d[row]));
+
+                //add_point(series_im_e, mf.capacity, mf.frequency, row, 0, mf.ImEpsilon(value, mf.tan_d[row]));
+                //add_point(series_coul, mf.re_epsilon, mf.tan_d, row, mf.ReEpsilon(value), mf.ImEpsilon(value, mf.tan_d[row]));
 
                 mf.im_epsilon[row] = mf.ImEpsilon(value, mf.tan_d[row]);
                 allowed_addition(mf.im_epsilon[row], row, 4);
@@ -223,8 +249,11 @@ MainWindow::MainWindow(QWidget *parent)
         case 2:
 
             if (mf.capacity[row]) {
-                add_point(series_im_e, mf.im_epsilon, mf.frequency, row, 0, mf.ImEpsilon(mf.capacity[row], value));
-                add_point(series_coul, mf.im_epsilon, mf.re_epsilon, row, 0, mf.ImEpsilon(mf.capacity[row], value));
+
+                add_point(map_ScatterSeries[charts[0]][1], mf.im_epsilon, mf.frequency, row, 0, mf.ImEpsilon(mf.capacity[row], value));
+                add_point(map_ScatterSeries[charts[1]][0], mf.im_epsilon, mf.re_epsilon, row, 0, mf.ImEpsilon(mf.capacity[row], value));
+                //add_point(series_im_e, mf.im_epsilon, mf.frequency, row, 0, mf.ImEpsilon(mf.capacity[row], value));
+                //add_point(series_coul, mf.im_epsilon, mf.re_epsilon, row, 0, mf.ImEpsilon(mf.capacity[row], value));
 
                 mf.im_epsilon[row] = mf.ImEpsilon(mf.capacity[row], value);
                 allowed_addition(mf.im_epsilon[row], row, 4);
@@ -331,64 +360,67 @@ void MainWindow::addition(const std::map<int, double>& field, const int& row, co
     }
 }
 
+void MainWindow::AxisSample(QValueAxis *axis, const QString& title) {
+    axis->setRange(0, 11);
+    axis->setTickCount(12);
+    axis->setMinorTickCount(4);
 
-void MainWindow::CreateChart(QLayout *layout, QChartView *view, QChart *chart, std::vector<QScatterSeries*> series,
-                             const QString& ax, const QString &ay, bool legend) {
+    QPen minor;
+    minor.setColor("#A3D9FC");
+    minor.setStyle(Qt::DotLine);
 
-    QValueAxis *axisX = new QValueAxis;
-    QValueAxis *axisY = new QValueAxis;
+    QPen major;
+    major.setColor("#6CC4FF");
+    major.setStyle(Qt::DashLine);
 
-    axisX->setRange(0, 11);
-    axisX->setTickCount(12);
-    axisX->setMinorTickCount(4);
-
-    QPen pen_minor;
-    pen_minor.setColor("#A3D9FC");
-    pen_minor.setStyle(Qt::DotLine);
-
-    QPen pen;
-    pen.setColor("#6CC4FF");
-    pen.setStyle(Qt::DashLine);
+    axis->setMinorGridLinePen(minor);
+    axis->setGridLinePen(major);
+    axis->setLabelFormat("%.2f");
+    axis->setTitleText(title);
+}
 
 
-    axisX->setMinorGridLinePen(pen_minor);
-    axisX->setGridLinePen(pen);
-    axisX->setLabelFormat("%.2f");
-    axisX->setTitleText(ax);
+void MainWindow::CreateScatterChart(QLayout *layout, const int& index, const QString& nameX, const QString &nameY,
+                                    const std::vector<QString>& names_series) {
+    QValueAxis *axisX = new QValueAxis();
+    QValueAxis *axisY = new QValueAxis();
 
-    axisY->setRange(0, 11);
-    axisY->setTickCount(12);
-    axisY->setMinorTickCount(4);
-    axisY->setMinorGridLinePen(pen_minor);
-    axisY->setGridLinePen(pen);
-    axisY->setLabelFormat("%.2f");
-    axisY->setTitleText(ay);
+    AxisSample(axisX, nameX);
+    AxisSample(axisY, nameY);
+
+    QChart *chart = new QChart();
 
     chart->addAxis(axisX, Qt::AlignBottom);
     chart->addAxis(axisY, Qt::AlignLeft);
 
-    for (int i = 0; i < series.size(); ++i) {
-        chart->addSeries(series[i]);
-        series[i]->attachAxis(axisX);
-        series[i]->attachAxis(axisY);
-        series[i]->setMarkerSize(12);
+    QList<QScatterSeries*> list_series;
+
+    for (size_t i = 0; i < names_series.size(); ++i) {
+        QScatterSeries *series = new QScatterSeries();
+        chart->addSeries(series);
+        series->attachAxis(axisX);
+        series->attachAxis(axisY);
+        series->setMarkerSize(12);
+        series->setName(names_series[i]);
+
+        list_series.append(series);
     }
 
     chart->setAnimationOptions(QChart::AllAnimations);
-
-    chart->legend()->setVisible(legend);
-    chart->legend()->setMarkerShape(QLegend::MarkerShapeCircle);
 
     chart->legend()->setAlignment(Qt::AlignRight);
     chart->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
     chart->legend()->setInteractive(true);
 
+    QChartView *view = new QChartView();
+
     view->setChart(chart);
     view->setRenderHint(QPainter::Antialiasing);
     layout->addWidget(view);
 
+    map_ScatterSeries[view] = list_series;
+    charts[index] = view;
 }
-
 
 void MainWindow::on_download_clicked() {
     QString filter = "All File (*.*) ;; CSV (*.csv) ;; Excel (*.xlsx)";
@@ -457,7 +489,7 @@ void MainWindow::on_clear_clicked() {
             for (auto& series: list) {
                 series->clear();
             }
-            chart->update();
+            chart->chart()->update();
         }
 
         charts.erase(2);
@@ -467,6 +499,69 @@ void MainWindow::on_clear_clicked() {
     }
 }
 
+void MainWindow::Histogram() {
+    auto response = mf.intervals_of_radius();
+    double max_y = 0;
+    QBarSet *set = new QBarSet("");
+
+    QStringList categories;
+    for (const auto& [r, n]: response.first) {
+        *set << n;
+        max_y = n > max_y? n * 1.1 : max_y;
+        categories << QString::number(roundoff(r, 2));
+    }
+
+    for (const auto& [radius, row]: response.second) {
+        allowed_addition(radius, row, 5);
+        allowed_addition(mf.radius_and_concentration[radius], row, 6);
+    }
+
+    ///Создание новой страницы и вставка в нее слоя с виджетом для отображения графика
+    QWidget *page = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout();
+    page->setLayout(layout);
+    ui->tabWidget->insertTab(2, page, "Distribution");
+
+    QBarSeries *series_dist = new QBarSeries();
+    QChart *chart_dist = new QChart();
+    QChartView *view_dist = new QChartView();
+
+    QBarCategoryAxis *axisX = new QBarCategoryAxis();
+    QValueAxis *axisY = new QValueAxis();
+
+    axisY->setTitleText("concentration");
+    axisY->setRange(0, 1);
+    axisY->setMinorTickCount(4);
+    chart_dist->addAxis(axisY, Qt::AlignLeft);
+
+    axisX->setTitleText("Radius (nm)");
+
+    chart_dist->addSeries(series_dist);
+    chart_dist->setTitle("Particle size distribution");
+    view_dist->setChart(chart_dist);
+    view_dist->setRenderHint(QPainter::Antialiasing);
+
+    series_dist->append(set);
+    series_dist->setBarWidth(1);
+
+    chart_dist->setAnimationOptions(QChart::AllAnimations);
+    chart_dist->legend()->setVisible(false);
+
+    axisX->append(categories);
+    chart_dist->addAxis(axisX, Qt::AlignBottom);
+    series_dist->attachAxis(axisX);
+
+    axisY->setRange(0, max_y);
+    series_dist->attachAxis(axisY);
+
+    layout->addWidget(view_dist);
+
+    chart_dist->legend()->setInteractive(true);
+    charts[2] = view_dist;
+    map_BarSeries[view_dist] = {series_dist};
+
+    ui->tabWidget->setCurrentIndex(2);
+}
 
 void MainWindow::on_plotDistribution_clicked() {
 
@@ -474,69 +569,16 @@ void MainWindow::on_plotDistribution_clicked() {
         return;
     }
 
-    if (mf.radius_and_concentration.empty()) {
-
-        auto response = mf.intervals_of_radius();
-        double max_y = 0;
-        QBarSet *set = new QBarSet("");
-
-        QStringList categories;
-        for (const auto& [r, n]: response.first) {
-            *set << n;
-            max_y = n > max_y? n * 1.1 : max_y;
-            categories << QString::number(roundoff(r, 2));
-        }
-
-        for (const auto& [radius, row]: response.second) {
-            allowed_addition(radius, row, 5);
-            allowed_addition(mf.radius_and_concentration[radius], row, 6);
-        }
-
-        ///Создание новой страницы и вставка в нее слоя с виджетом для отображения графика
-        QWidget *page = new QWidget();
-        QVBoxLayout *layout = new QVBoxLayout();
-        page->setLayout(layout);
-        ui->tabWidget->insertTab(2, page, "Distribution");
-
-        QBarSeries *series_dist = new QBarSeries();
-        QChart *chart_dist = new QChart();
-        QChartView *view_dist = new QChartView();
-
-        QBarCategoryAxis *axisX = new QBarCategoryAxis();
-        QValueAxis *axisY = new QValueAxis();
-
-        axisY->setTitleText("concentration");
-        axisY->setRange(0, 1);
-        axisY->setMinorTickCount(4);
-        chart_dist->addAxis(axisY, Qt::AlignLeft);
-        axisX->setTitleText("Radius (nm)");
-
-        chart_dist->addSeries(series_dist);
-        chart_dist->setTitle("Particle size distribution");
-        view_dist->setChart(chart_dist);
-        view_dist->setRenderHint(QPainter::Antialiasing);
-
-        series_dist->append(set);
-        series_dist->setBarWidth(1);
-
-        chart_dist->setAnimationOptions(QChart::AllAnimations);
-        chart_dist->legend()->setVisible(false);
-
-        axisX->append(categories);
-        chart_dist->addAxis(axisX, Qt::AlignBottom);
-        series_dist->attachAxis(axisX);
-
-        axisY->setRange(0, max_y);
-        series_dist->attachAxis(axisY);
-
-        layout->addWidget(view_dist);
-
-        charts[2] = chart_dist;
-        map_BarSeries[chart_dist] = {series_dist};
-
-    } else {
-        QMessageBox::information(this, "...", "The distribution already built.");
+    if (!mf.radius_and_concentration.empty()) {
+        auto response = QMessageBox::information(this, "Rebuild Distribution", "Are you sure you want to rebuild distribution?",
+                                 QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No);
+       if (response == QMessageBox::StandardButton::Yes) {
+        mf.radius_and_concentration.clear();
+        mf.total_area = 0;
+       }
     }
+
+    Histogram();
 }
 
 
@@ -552,13 +594,13 @@ void MainWindow::on_lineEdit_C0_textChanged(const QString &arg1) {
 
         if (mf.im_epsilon[row]) {
             mf.im_epsilon[row] = mf.ImEpsilon(mf.capacity[row], mf.tan_d[row]);
-            series_coul->replace(row, mf.re_epsilon[row], mf.im_epsilon[row]);
-            series_im_e->replace(row, mf.frequency[row], mf.im_epsilon[row]);
+            map_ScatterSeries[charts[1]][0]->replace(row, mf.re_epsilon[row], mf.im_epsilon[row]);
+            map_ScatterSeries[charts[0]][1]->replace(row, mf.frequency[row], mf.im_epsilon[row]);
             allowed_addition(mf.im_epsilon[row], row, 4);
         }
 
         allowed_addition(mf.re_epsilon[row], row, 3);
-        series_re_e->replace(row, mf.frequency[row], mf.re_epsilon[row]);
+        map_ScatterSeries[charts[0]][0]->replace(row, mf.frequency[row], mf.re_epsilon[row]);
     }
 
 }
@@ -622,14 +664,16 @@ void MainWindow::on_save_clicked() {
 }
 
 
-void MainWindow::Export(QChartView *view_chart) {
+void MainWindow::on_Export_clicked() {
+    int index = ui->tabWidget->currentIndex();
+
     QString path = QFileDialog::getSaveFileName(this,  tr("Save file"), QDir::homePath(), tr("Images (*.png)"));
 
     if(path == ""){
         return void();
     }
 
-    QPixmap p = view_chart->grab();
+    QPixmap p = charts[index]->grab();
     p.save(path, "PNG", 100);
 }
 
@@ -648,7 +692,7 @@ void MainWindow::on_additional_quantities_clicked() {
 
 void MainWindow::on_Title_textChanged(const QString &arg1) {
     int index = ui->tabWidget->currentIndex();
-    charts[index]->setTitle(arg1);
+    charts[index]->chart()->setTitle(arg1);
 }
 
 
@@ -658,7 +702,7 @@ void MainWindow::on_TitleFont_clicked() {
 
     if(ok) {
         int index = ui->tabWidget->currentIndex();
-        charts[index]->setTitleFont(font);
+        charts[index]->chart()->setTitleFont(font);
     }
 }
 
@@ -668,9 +712,9 @@ void MainWindow::on_ChartAxisName_textChanged(const QString &arg1) {
     QString axis = ui->ChoiseAxis->currentText();
 
     if (axis == "X") {
-        charts[index]->axisX()->setTitleText(arg1);
+        charts[index]->chart()->axisX()->setTitleText(arg1);
     } else if (axis == "Y") {
-        charts[index]->axisY()->setTitleText(arg1);
+        charts[index]->chart()->axisY()->setTitleText(arg1);
     }
 
 }
@@ -684,9 +728,9 @@ void MainWindow::on_FontAxis_clicked() {
         int index = ui->tabWidget->currentIndex();
         QString axis = ui->ChoiseAxis->currentText();
         if (axis == "X") {
-            charts[index]->axisX()->setTitleFont(font);;
+            charts[index]->chart()->axisX()->setTitleFont(font);;
         } else if (axis == "Y") {
-            charts[index]->axisY()->setTitleFont(font);;
+            charts[index]->chart()->axisY()->setTitleFont(font);;
         }
     }
 }
@@ -700,9 +744,9 @@ void MainWindow::on_MajorFont_clicked() {
         int index = ui->tabWidget->currentIndex();
         QString axis = ui->ChoiseAxis->currentText();
         if (axis == "X") {
-            charts[index]->axisX()->setLabelsFont(font);
+            charts[index]->chart()->axisX()->setLabelsFont(font);
         } else if (axis == "Y") {
-            charts[index]->axisY()->setLabelsFont(font);
+            charts[index]->chart()->axisY()->setLabelsFont(font);
         }
     }
 }
@@ -714,9 +758,9 @@ void MainWindow::on_MajorColor_clicked() {
     if (color.isValid()) {
         int index = ui->tabWidget->currentIndex();
         if (axis == "X") {
-            charts[index]->axisX()->setGridLineColor(color);
+            charts[index]->chart()->axisX()->setGridLineColor(color);
         } else if (axis == "Y") {
-            charts[index]->axisY()->setGridLineColor(color);
+            charts[index]->chart()->axisY()->setGridLineColor(color);
         }
     }
 }
@@ -727,9 +771,9 @@ void MainWindow::on_MinorColor_clicked() {
     if (color.isValid()) {
         int index = ui->tabWidget->currentIndex();
         if (axis == "X") {
-            charts[index]->axisX()->setMinorGridLineColor(color);
+            charts[index]->chart()->axisX()->setMinorGridLineColor(color);
         } else if (axis == "Y") {
-            charts[index]->axisY()->setMinorGridLineColor(color);
+            charts[index]->chart()->axisY()->setMinorGridLineColor(color);
         }
     }
 }
@@ -742,13 +786,13 @@ void MainWindow::on_SeriesColor_clicked() {
     if (color.isValid()) {
         int index = ui->tabWidget->currentIndex();
 
-        if (charts[index]->series()[0]->type() == QAbstractSeries::SeriesTypeScatter) {
+        if (charts[index]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeScatter) {
             for (auto& series: map_ScatterSeries[charts[index]]) {
                 if (series->name() == series_name) {
                     series->setColor(color);
                 }
             }
-        } else if (charts[index]->series()[0]->type() == QAbstractSeries::SeriesTypeBar) {
+        } else if (charts[index]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeBar) {
             for (auto& series: map_BarSeries[charts[index]]) {
                 if (series->name() == series_name) {
                     series->barSets()[0]->setColor(color);
@@ -760,12 +804,11 @@ void MainWindow::on_SeriesColor_clicked() {
 }
 
 
-
 void MainWindow::on_SeriesName_textChanged(const QString &arg1) {
     int index = ui->tabWidget->currentIndex();
     int index_series = ui->ChoiseSeries->currentIndex();
     ui->ChoiseSeries->setItemText(index_series, arg1);
-    charts[index]->series()[index_series]->setName(arg1);
+    charts[index]->chart()->series()[index_series]->setName(arg1);
 }
 
 
@@ -775,7 +818,7 @@ void MainWindow::on_LegendFont_clicked() {
 
     if(ok) {
         int index = ui->tabWidget->currentIndex();
-        charts[index]->legend()->setFont(font);
+        charts[index]->chart()->legend()->setFont(font);
     }
 }
 
@@ -785,13 +828,13 @@ void MainWindow::on_MarkerSize_valueChanged(int arg1) {
 
 
     int index = ui->tabWidget->currentIndex();
-    if (charts[index]->series()[0]->type() == QAbstractSeries::SeriesTypeScatter) {
+    if (charts[index]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeScatter) {
         for (auto& series: map_ScatterSeries[charts[index]]) {
             if (series->name() == series_name) {
                 series->setMarkerSize(arg1);
             }
         }
-    } else if (charts[index]->series()[0]->type() == QAbstractSeries::SeriesTypeBar) {
+    } else if (charts[index]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeBar) {
         for (auto& series: map_BarSeries[charts[index]]) {
             if (series->name() == series_name) {
                 series->setBarWidth(arg1 * 0.01);
@@ -803,6 +846,7 @@ void MainWindow::on_MarkerSize_valueChanged(int arg1) {
 
 void MainWindow::on_LegendShow_stateChanged(int arg1) {
     int index = ui->tabWidget->currentIndex();
-    charts[index]->legend()->setVisible(arg1);
+    charts[index]->chart()->legend()->setVisible(arg1);
 }
+
 

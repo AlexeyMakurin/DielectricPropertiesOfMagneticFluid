@@ -87,22 +87,12 @@ private slots:
 
     void on_LegendShow_stateChanged(int arg1);
 
+    void on_Export_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     QTableWidgetItem * protoitem = new QTableWidgetItem();
-
-    //Charts of Epsilon
-    QScatterSeries *series_re_e = new  QScatterSeries();
-    QScatterSeries *series_im_e = new QScatterSeries();
-    QChart *chart_epsilon = new QChart();
-    QChartView *view_epsilon = new QChartView();
-
-    //Charts Coul-Coul
-    QScatterSeries *series_coul = new QScatterSeries();
-    QChart *chart_coul = new QChart();
-    QChartView *view_coul = new QChartView();
-
 
     bool hidden_frame = true;
     bool hidden_settings = true;
@@ -128,20 +118,9 @@ private:
         {QScatterSeries::MarkerShapeRotatedRectangle, "RotatedRectangle"}
     };
 
-
-    std::map<int, QChart*> charts = {
-        {0, chart_epsilon},
-        {1, chart_coul},
-
-    };
-
-    std::map<QChart*, QList<QScatterSeries*>> map_ScatterSeries = {
-        {chart_epsilon, {series_re_e, series_im_e}},
-        {chart_coul, {series_coul}},
-
-    };
-
-    std::map<QChart*, QList<QBarSeries*>> map_BarSeries = {};
+    std::map<int, QChartView*> charts;
+    std::map<QChartView*, QList<QScatterSeries*>> map_ScatterSeries;
+    std::map<QChartView*, QList<QBarSeries*>> map_BarSeries;
 
 
     void add_point(QScatterSeries *series, std::map<int, double>& map1,  std::map<int, double>& map2,
@@ -149,14 +128,16 @@ private:
 
     void AutoScale(QChart *chart, QList<QScatterSeries*> &list_series) ;
 
-    void CreateChart(QLayout *layout, QChartView *view, QChart *chart, std::vector<QScatterSeries*> series,
-                     const QString& ax, const QString& ay, bool legend=false);
-
     void allowed_addition(const double& item, const int& row, const int& col);
+
     void addition(const std::map<int, double>& fiel, const int& row, const int& col);
 
-    void Export(QChartView *view_chart);
+    void Histogram();
 
+    void CreateScatterChart(QLayout *layout, const int& index, const QString& nameX, const QString &nameY,
+                            const std::vector<QString>& names_series);
+
+    void AxisSample(QValueAxis *axis, const QString& title);
 };
 
 
