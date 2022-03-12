@@ -23,8 +23,7 @@ double MagneticFluid::ImEpsilon(const double& capacity, const double& tan_d) {
 }
 
 
-std::pair<std::map<double, double>,  std::map<double, int>> MagneticFluid::intervals_of_radius() {
-
+std::map<double, int> MagneticFluid::radius() {
     std::map<double, int> rows;
 
     for (const auto& [row, value]: frequency) {
@@ -37,32 +36,38 @@ std::pair<std::map<double, double>,  std::map<double, int>> MagneticFluid::inter
         rows[r] = row;
     }
 
-    int count = round(1 + 3.322 * log10(radius_and_concentration.size()));
-    double intervallbreite = round(prev(radius_and_concentration.end())->first - radius_and_concentration.begin()->first) / count;
+    return rows;
+}
+
+std::map<double, double> MagneticFluid::intervals(const int& count) {
+
+    int count_ = count ? count : round(1 + 3.322 * log10(radius_and_concentration.size()));
+    double intervallbreite = round(prev(radius_and_concentration.end())->first - radius_and_concentration.begin()->first) / count_;
+
+    auto find_elements = [&](const double& r_cur) {
+        double mean = 0;
+        double score = 0;
+        for (auto& [r, area]: radius_and_concentration) {
+            if ((r_cur - 0.5 * intervallbreite) <= r && r < (r_cur + 0.5 * intervallbreite)) {
+                ++score;
+                area /= total_area;
+                mean += area;
+            }
+        }
+
+        return mean / (score? score : 1);
+    };
+
 
     double r_current = radius_and_concentration.begin()->first;
     std::map<double, double> result;
-    int score = 0;
-    double con = 0;
 
-    for (auto it = radius_and_concentration.begin(); it != radius_and_concentration.end(); ++it) {
-
-        con = it->second / total_area;
-        it->second = con;
-        //int row = rows[it->first];
-
-        if (it->first < (r_current + 0.5 * intervallbreite)) {
-            result[r_current] += (con);
-            ++score;
-        } else {
-             result[r_current] /= (score? score : 1);
-             r_current += intervallbreite;
-             result[r_current] += (con);
-             score = 1;
-        }
+    while (r_current <= radius_and_concentration.begin()->first + (count_ + 0.5) * intervallbreite) {
+        result[r_current] = find_elements(r_current);
+        r_current += intervallbreite;
     }
 
-    return std::make_pair(result, rows);
+    return result;
 }
 
 

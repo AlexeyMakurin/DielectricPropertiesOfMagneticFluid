@@ -31,6 +31,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -89,6 +90,8 @@ private slots:
 
     void on_Export_clicked();
 
+    void on_MajorCount_valueChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
 
@@ -99,6 +102,7 @@ private:
 
     bool act_cell = true;
     bool align = false;
+
 
     std::map<Qt::PenStyle, QString> line_styles = {
         {Qt::SolidLine, "SolidLine"},
@@ -118,7 +122,7 @@ private:
         {QScatterSeries::MarkerShapeRotatedRectangle, "RotatedRectangle"}
     };
 
-    std::map<int, QChartView*> charts;
+    std::map<QString, QChartView*> charts;
     std::map<QChartView*, QList<QScatterSeries*>> map_ScatterSeries;
     std::map<QChartView*, QList<QBarSeries*>> map_BarSeries;
 
@@ -132,12 +136,17 @@ private:
 
     void addition(const std::map<int, double>& fiel, const int& row, const int& col);
 
-    void Histogram();
+    void Histogram(const int& count = 0);
 
-    void CreateScatterChart(QLayout *layout, const int& index, const QString& nameX, const QString &nameY,
+    void CreateScatterChart(QLayout *layout, const QString& name, const QString& nameX, const QString &nameY,
                             const std::vector<QString>& names_series);
 
     void AxisSample(QValueAxis *axis, const QString& title);
+
+    QString GetName(const int& index);
+
+    void EnableSettingsMinor(bool state);
+
 };
 
 

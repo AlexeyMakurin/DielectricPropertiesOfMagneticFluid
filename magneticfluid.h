@@ -3,7 +3,7 @@
 
 #include <map>
 #include <cmath>
-
+#include <algorithm>
 
 
 class MagneticFluid {
@@ -26,8 +26,8 @@ public:
     double ReEpsilon(const double& capacity);
     double ImEpsilon(const double& capacity, const double& tan_d);
 
-    std::pair<std::map<double, double>,  std::map<double, int>> intervals_of_radius();
-
+    std::map<double, double> intervals(const int& count = 0);
+    std::map<double, int> radius();
     double total_area = 0;
 
 private:
