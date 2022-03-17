@@ -20,6 +20,7 @@
 #include <QFile>
 #include <QFontDialog>
 #include <QColorDialog>
+#include <QGraphicsTextItem>
 
 #include "download_file.h"
 #include "read_file.h"
@@ -90,12 +91,13 @@ private slots:
 
     void on_Export_clicked();
 
-    void on_MajorCount_valueChanged(int arg1);
+   // void on_MajorCount_valueChanged(int arg1);
 
 private:
     Ui::MainWindow *ui;
 
-    QTableWidgetItem * protoitem = new QTableWidgetItem();
+    QTableWidgetItem *protoitem = new QTableWidgetItem();
+    QGraphicsSimpleTextItem *m_coordX;
 
     bool hidden_frame = true;
     bool hidden_settings = true;
@@ -125,12 +127,14 @@ private:
     std::map<QString, QChartView*> charts;
     std::map<QChartView*, QList<QScatterSeries*>> map_ScatterSeries;
     std::map<QChartView*, QList<QBarSeries*>> map_BarSeries;
-
+    std::map<QChartView*, std::vector<int>> axis_count_ticks;
 
     void add_point(QScatterSeries *series, std::map<int, double>& map1,  std::map<int, double>& map2,
                    const int& row, const double& value1=0, const double& value2=0);
 
-    void AutoScale(QChart *chart, QList<QScatterSeries*> &list_series) ;
+    void AutoScale(QChart *chart, QList<QScatterSeries*> &list_series);
+    void AutoScale(QChart *chart, QList<QBarSeries*> &list_series);
+
 
     void allowed_addition(const double& item, const int& row, const int& col);
 
@@ -141,11 +145,15 @@ private:
     void CreateScatterChart(QLayout *layout, const QString& name, const QString& nameX, const QString &nameY,
                             const std::vector<QString>& names_series);
 
-    void AxisSample(QValueAxis *axis, const QString& title);
+    void AxisSample(QValueAxis *axis, const QString& title, const int& major_count=12, const int& minor_count=4, const int& range=11);
 
     QString GetName(const int& index);
 
     void EnableSettingsMinor(bool state);
+
+    void HistogramChangedIntervals(const int& arg1);
+
+    void TicketsCountChanged(const int& index, const int& value, const QString& type);
 
 };
 
