@@ -133,14 +133,13 @@ private:
                    const int& row, const double& value1=0, const double& value2=0);
 
     void AutoScale(QChart *chart, QList<QScatterSeries*> &list_series);
-    void AutoScale(QChart *chart, QList<QBarSeries*> &list_series);
 
 
     void allowed_addition(const double& item, const int& row, const int& col);
 
     void addition(const std::map<int, double>& fiel, const int& row, const int& col);
 
-    void Histogram(const int& count = 0);
+    void Histogram(const int& count = 0, const int& majorY=4, const int& minorY=4, const QColor& color=QColor(255, 0, 0, 127), const double& width=1);
 
     void CreateScatterChart(QLayout *layout, const QString& name, const QString& nameX, const QString &nameY,
                             const std::vector<QString>& names_series);
@@ -151,10 +150,11 @@ private:
 
     void EnableSettingsMinor(bool state);
 
-    void HistogramChangedIntervals(const int& arg1);
+    void HistogramChangedIntervals(const int& arg1, const QString& type);
 
     void TicketsCountChanged(const int& index, const int& value, const QString& type);
 
+    QString GetName();
 };
 
 

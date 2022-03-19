@@ -21,6 +21,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_eta->setText(QString::number(mf.eta_));
     ui->lineEdit_temp->setText(QString::number(mf.T_));
 
+    ui->splitter_2->setStretchFactor(0,0);
+    ui->splitter_2->setStretchFactor(1,1);
+
+    ui->splitter_3->setStretchFactor(0,0);
+    ui->splitter_3->setStretchFactor(1,1);
+
     ///Setting Table
     ui->tableWidget->setRowCount(14);
     ui->tableWidget->setColumnCount(7);
@@ -104,10 +110,10 @@ MainWindow::MainWindow(QWidget *parent)
         int index = ui->tabWidget->currentIndex();
 
         QString axis_name = ui->ChoiseAxis->currentText();
-        bool state = axis_name == "X" && charts[GetName(index)]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeBar? 0 : 1;
+        bool state = charts[GetName(index)]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeBar? 0 : 1;
 
         if (!state) {
-            HistogramChangedIntervals(arg);
+            HistogramChangedIntervals(arg, "major");
 
         } else {
             TicketsCountChanged(index, arg, "major");
@@ -119,10 +125,12 @@ MainWindow::MainWindow(QWidget *parent)
         int index = ui->tabWidget->currentIndex();
 
         QString axis_name = ui->ChoiseAxis->currentText();
-        bool state = axis_name == "X" && charts[GetName(index)]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeBar? 0 : 1;
+        bool state = charts[GetName(index)]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeBar? 0 : 1;
 
         if (state) {
            TicketsCountChanged(index, arg, "minor");
+        } else {
+            HistogramChangedIntervals(arg, "minor");
         }
 
     });
@@ -168,20 +176,22 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(ui->ChoiseSeries, &QComboBox::currentTextChanged, [&](const QString& name) {
         ui->SeriesName->setText(name);
 
-        int index = ui->tabWidget->currentIndex();
+        //int index = ui->tabWidget->currentIndex();
 
-        if (charts[GetName(index)]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeScatter) {
+        if (charts[GetName()]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeScatter) {
 
-            auto it = std::find_if(map_ScatterSeries[charts[GetName(index)]].begin(), map_ScatterSeries[charts[GetName(index)]].end(), [&](const QScatterSeries* series){
+            auto it = std::find_if(map_ScatterSeries[charts[GetName()]].begin(), map_ScatterSeries[charts[GetName()]].end(), [&](const QScatterSeries* series){
                 return series->name() == name;
             });
 
-            QScatterSeries::MarkerShape shape((*it)->markerShape());
-            ui->MarkerSize->setValue((*it)->markerSize());
-            ui->MarkersView->setCurrentText(marker_shape[shape]);
+            if (it != map_ScatterSeries[charts[GetName()]].end()) {
+                QScatterSeries::MarkerShape shape((*it)->markerShape());
+                ui->MarkerSize->setValue((*it)->markerSize());
+                ui->MarkersView->setCurrentText(marker_shape[shape]);
+            }
 
-        } else if (charts[GetName(index)]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeBar) {
-            auto it = std::find_if(map_BarSeries[charts[GetName(index)]].begin(), map_BarSeries[charts[GetName(index)]].end(), [&](const QBarSeries* series){
+        } else if (charts[GetName()]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeBar) {
+            auto it = std::find_if(map_BarSeries[charts[GetName()]].begin(), map_BarSeries[charts[GetName()]].end(), [&](const QBarSeries* series){
                 return series->name() == name;
             });
             ui->MarkerSize->setValue((*it)->barWidth() * 100);
@@ -347,26 +357,6 @@ void MainWindow::AutoScale(QChart *chart, QList<QScatterSeries*> &list_series){
 }
 
 
-void MainWindow::AutoScale(QChart *chart, QList<QBarSeries*> &list_series) {
-    double yMax = 0;
-
-    int score = 0;
-    for(const auto& series: list_series) {
-        for (const auto& barSet : series->barSets()){
-            for (int i = 0; i < barSet->count(); ++i) {
-                yMax = qMax(yMax, barSet->at(i));
-                ++score;
-            }
-        }
-    }
-
-    if (!score) {
-        yMax = 1;
-    }
-    chart->axisY()->setRange(0, yMax * 1.1);
-}
-
-
 void MainWindow::allowed_addition(const double& item, const int& row, const int& col) {
     act_cell = false;
     QTableWidgetItem *newitem = protoitem->clone();
@@ -458,38 +448,42 @@ void MainWindow::TicketsCountChanged(const int& index, const int& value, const Q
     int major_count = 12;
     int minor_count = 4;
 
-    auto align = axis_name == "Y"? Qt::AlignLeft: Qt::AlignBottom;
+    //auto align = axis_name == "Y"? Qt::AlignLeft: Qt::AlignBottom;
+    if (axis_name == "X") {
+        if(type == "major") {
+            charts[GetName(index)]->chart()->addAxis(axis, Qt::AlignBottom);
+            minor_count = axis_count_ticks[charts[GetName(index)]][2];
+            axis_count_ticks[charts[GetName(index)]][0] = value;
+            major_count = value;
 
-    if(type == "major") {
-        charts[GetName(index)]->chart()->addAxis(axis, align);
-        minor_count = axis_count_ticks[charts[GetName(index)]][2];
-        axis_count_ticks[charts[GetName(index)]][0] = value;
-        major_count = value;
+        } else if (type == "minor") {
+            charts[GetName(index)]->chart()->addAxis(axis, Qt::AlignBottom);
+            major_count = axis_count_ticks[charts[GetName(index)]][0];
+            axis_count_ticks[charts[GetName(index)]][2] = value;
+            minor_count = value;
+        }
+    } else if (axis_name == "Y") {
+        if(type == "major") {
+            charts[GetName(index)]->chart()->addAxis(axis, Qt::AlignLeft);
+            minor_count = axis_count_ticks[charts[GetName(index)]][3];
+            axis_count_ticks[charts[GetName(index)]][1] = value;
+            major_count = value;
 
-    } else if (type == "minor") {
-        charts[GetName(index)]->chart()->addAxis(axis, align);
-        major_count = axis_count_ticks[charts[GetName(index)]][0];
-        axis_count_ticks[charts[GetName(index)]][2] = value;
-        minor_count = value;
+        } else if (type == "minor") {
+            charts[GetName(index)]->chart()->addAxis(axis, Qt::AlignLeft);
+            major_count = axis_count_ticks[charts[GetName(index)]][1];
+            axis_count_ticks[charts[GetName(index)]][3] = value;
+            minor_count = value;
+        }
     }
 
     AxisSample(axis, axis_title, major_count, minor_count);
 
-    if (charts[GetName(index)]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeScatter) {
-        for (auto& series: map_ScatterSeries[charts[GetName(index)]]) {
-             series->attachAxis(axis);
-        }
-
-        AutoScale(charts[GetName(index)]->chart(), map_ScatterSeries[charts[GetName(index)]]);
-
-    } else if (charts[GetName(index)]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeBar) {
-        double max_y = 1;
-        for (auto& series: map_BarSeries[charts[GetName(index)]]) {
-             series->attachAxis(axis);
-              AutoScale(charts[GetName(index)]->chart(), map_BarSeries[charts[GetName(index)]]);
-        }
-
+    for (auto& series: map_ScatterSeries[charts[GetName(index)]]) {
+        series->attachAxis(axis);
     }
+
+    AutoScale(charts[GetName(index)]->chart(), map_ScatterSeries[charts[GetName(index)]]);
 
     //Give settings
     axis->setGridLinePen(major_style);
@@ -622,18 +616,20 @@ void MainWindow::on_clear_clicked() {
     }
 }
 
-void MainWindow::Histogram(const int& count) {
+void MainWindow::Histogram(const int& count, const int& majorY, const int& minorY, const QColor& color, const double& width) {
     auto rows = mf.radius();
     auto interval = mf.intervals(count);
 
     double max_y = 0;
-    QBarSet *set = new QBarSet("");
+    QBarSet *set = new QBarSet("series 0");
+    set->setColor(color);
+
 
     QStringList categories;
     for (const auto& [r, n]: interval) {
         *set << n;
 
-        max_y = n > max_y? n * 1.1 : max_y;
+        max_y = n > max_y? n * 1.2 : max_y;
         categories << QString::number(roundoff(r, 2));
     }
 
@@ -652,8 +648,9 @@ void MainWindow::Histogram(const int& count) {
     QValueAxis *axisY = new QValueAxis();
 
     axisY->setTitleText("concentration");
-    axisY->setRange(0, 1);
-    axisY->setMinorTickCount(4);
+    axisY->setRange(0, max_y);
+    axisY->setTickCount(majorY);
+    axisY->setMinorTickCount(minorY);
 
     chart_dist->addAxis(axisY, Qt::AlignLeft);
 
@@ -665,7 +662,7 @@ void MainWindow::Histogram(const int& count) {
     view_dist->setRenderHint(QPainter::Antialiasing);
 
     series_dist->append(set);
-    series_dist->setBarWidth(1);
+    series_dist->setBarWidth(width);
 
     chart_dist->setAnimationOptions(QChart::AllAnimations);
     chart_dist->legend()->setVisible(false);
@@ -674,19 +671,20 @@ void MainWindow::Histogram(const int& count) {
     chart_dist->addAxis(axisX, Qt::AlignBottom);
     series_dist->attachAxis(axisX);
 
-    axisY->setRange(0, max_y);
     series_dist->attachAxis(axisY);
 
     chart_dist->legend()->setInteractive(true);
     charts["Distribution"] = view_dist;
     map_BarSeries[view_dist] = {series_dist};
 
-    axis_count_ticks[view_dist] = {count, axisY->tickCount(), 0, 4};
+    int count_ = count? count : round(1 + 3.322 * log10(mf.radius_and_concentration.size()));
+    axis_count_ticks[view_dist] = {count_, majorY, 0, minorY};
 }
 
 void MainWindow::on_plotDistribution_clicked() {
 
-    if(mf.frequency.empty() && mf.im_epsilon.empty()) {
+    if(mf.frequency.size() < 2 && mf.im_epsilon.size() < 2) {
+        QMessageBox::information(this, "", "Not enough data to build the distribution!");
         return;
     }
 
@@ -717,14 +715,69 @@ void MainWindow::on_plotDistribution_clicked() {
 
 }
 
-void MainWindow::HistogramChangedIntervals(const int& arg1) {
+void MainWindow::HistogramChangedIntervals(const int& arg1, const QString& type) {
+
+    QString axis = ui->ChoiseAxis->currentText();
+
+    auto it = std::find_if(map_BarSeries[charts[GetName()]].begin(), map_BarSeries[charts[GetName()]].end(), [&](const QBarSeries * series){
+        return series->name() == ui->SeriesName->text();
+      });
+
+    QColor color = (*it)->barSets()[0]->color();
+    QString titleY = charts[GetName()]->chart()->axisY()->titleText();
+    QString titleX = charts[GetName()]->chart()->axisX()->titleText();
+    QString title = charts[GetName()]->chart()->title();
+
+    QFont font = charts[GetName()]->chart()->titleFont();
+    QFont fontY = charts[GetName()]->chart()->axisY()->titleFont();
+    QFont fontX = charts[GetName()]->chart()->axisY()->titleFont();
+
+    QPen major_styleX = charts[GetName()]->chart()->axisX()->gridLinePen();
+    QPen major_styleY = charts[GetName()]->chart()->axisY()->gridLinePen();
+    QPen minor_styleY = charts[GetName()]->chart()->axisY()->minorGridLinePen();
+
+    int majorX = axis_count_ticks[charts[GetName()]][0];
+    int majorY = axis_count_ticks[charts[GetName()]][1];
+    int minorY = axis_count_ticks[charts[GetName()]][3];
+
+    double width = (*it)->barWidth();
+
+    //QMessageBox::information(this, "", QString::number((*it)->barWidth()));
+
     mf.radius_and_concentration.clear();
     mf.total_area = 0;
     charts.erase("Distribution");
     map_BarSeries.erase(0);
     ui->tabWidget->removeTab(2);
 
-    Histogram(arg1);
+
+    if (type == "major") {
+
+        if (axis == "X") {
+            Histogram(arg1, majorY, minorY, color, width);
+
+        } else if (axis == "Y") {
+             Histogram(majorX, arg1, minorY, color, width);
+
+        }
+
+    } else if (type == "minor") {
+        Histogram(majorX, majorY, arg1, color, width);
+
+    }
+
+    charts["Distribution"]->chart()->axisX()->setGridLinePen(major_styleX);
+    charts["Distribution"]->chart()->axisY()->setGridLinePen(major_styleY);
+    charts["Distribution"]->chart()->axisY()->setMinorGridLinePen(minor_styleY);
+
+    charts["Distribution"]->chart()->axisY()->setTitleText(titleY);
+    charts["Distribution"]->chart()->axisX()->setTitleText(titleX);
+
+    charts["Distribution"]->chart()->axisY()->setTitleFont(fontY);
+    charts["Distribution"]->chart()->axisX()->setTitleFont(fontX);
+
+    charts["Distribution"]->chart()->setTitle(title);
+    charts["Distribution"]->chart()->setTitleFont(font);
 
     QWidget *page = new QWidget();
     QVBoxLayout *layout = new QVBoxLayout();
@@ -791,7 +844,7 @@ void MainWindow::on_save_clicked() {
 
         for (int col = 0; col < ui->tableWidget->columnCount(); ++col) {
             out << ui->tableWidget->horizontalHeaderItem(col)->text();
-            if (col + 1 != ui->tableWidget->columnCount()) {
+            if (col < ui->tableWidget->columnCount() - 1) {
                 out << ",";
             }
         }
@@ -801,12 +854,12 @@ void MainWindow::on_save_clicked() {
             for (int col = 0; col < ui->tableWidget->columnCount(); ++col) {
 
                 try {
-                    out << ui->tableWidget->item(row, col)->text() << ",";
+                    out << ui->tableWidget->item(row, col)->text();
                 } catch(std::exception& err) {
-                    out << "" << ",";
+                    out << "";
                 }
 
-               if (col + 1 != ui->tableWidget->columnCount()) {
+               if (col < ui->tableWidget->columnCount() - 1) {
                    out << ",";
                }
             }
@@ -842,6 +895,7 @@ void MainWindow::on_ChartsSettingsButton_clicked(){
 void MainWindow::on_additional_quantities_clicked() {
     hidden_frame = hidden_frame? false : true;
     ui->frame->setHidden(hidden_frame);
+    //ui->frame->setGeometry(0 ,0, 11, 791);
 }
 
 
@@ -899,7 +953,6 @@ void MainWindow::on_MajorFont_clicked() {
     }
 }
 
-
 void MainWindow::on_MajorColor_clicked() {
     QColor color = QColorDialog::getColor("#6CC4FF", this);
 
@@ -954,10 +1007,13 @@ void MainWindow::on_SeriesColor_clicked() {
 
 
 void MainWindow::on_SeriesName_textChanged(const QString &arg1) {
-    int index = ui->tabWidget->currentIndex();
     int index_series = ui->ChoiseSeries->currentIndex();
+
+    ui->ChoiseSeries->blockSignals(true);
     ui->ChoiseSeries->setItemText(index_series, arg1);
-    charts[GetName(index)]->chart()->series()[index_series]->setName(arg1);
+    ui->ChoiseSeries->blockSignals(false);
+
+    charts[GetName()]->chart()->series()[index_series]->setName(arg1);
 }
 
 
@@ -966,8 +1022,8 @@ void MainWindow::on_LegendFont_clicked() {
     QFont font = QFontDialog::getFont(&ok, QFont("Embria"), this);
 
     if(ok) {
-        int index = ui->tabWidget->currentIndex();
-        charts[GetName(index)]->chart()->legend()->setFont(font);
+        //int index = ui->tabWidget->currentIndex();
+        charts[GetName()]->chart()->legend()->setFont(font);
     }
 }
 
@@ -975,19 +1031,18 @@ void MainWindow::on_LegendFont_clicked() {
 void MainWindow::on_MarkerSize_valueChanged(int arg1) {
     QString series_name = ui->ChoiseSeries->currentText();
 
+    //int index = ui->tabWidget->currentIndex();
+    if (charts[GetName()]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeScatter) {
 
-    int index = ui->tabWidget->currentIndex();
-    if (charts[GetName(index)]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeScatter) {
-
-        auto it = std::find_if(map_ScatterSeries[charts[GetName(index)]].begin(), map_ScatterSeries[charts[GetName(index)]].end(), [&](const QScatterSeries * series){
+        auto it = std::find_if(map_ScatterSeries[charts[GetName()]].begin(), map_ScatterSeries[charts[GetName()]].end(), [&](const QScatterSeries *series){
             return series->name() == series_name;
         });
 
         (*it)->setMarkerSize(arg1);
 
-    } else if (charts[GetName(index)]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeBar) {
+    } else if (charts[GetName()]->chart()->series()[0]->type() == QAbstractSeries::SeriesTypeBar) {
 
-        auto it = std::find_if(map_BarSeries[charts[GetName(index)]].begin(), map_BarSeries[charts[GetName(index)]].end(), [&](const QBarSeries * series){
+        auto it = std::find_if(map_BarSeries[charts[GetName()]].begin(), map_BarSeries[charts[GetName()]].end(), [&](const QBarSeries * series){
             return series->name() == series_name;
         });
 
@@ -998,12 +1053,14 @@ void MainWindow::on_MarkerSize_valueChanged(int arg1) {
 
 
 void MainWindow::on_LegendShow_stateChanged(int arg1) {
-    int index = ui->tabWidget->currentIndex();
-    charts[GetName(index)]->chart()->legend()->setVisible(arg1);
+    charts[GetName()]->chart()->legend()->setVisible(arg1);
 }
 
 QString MainWindow::GetName(const int& index) {
     return ui->tabWidget->tabText(index);
 }
 
-
+QString MainWindow::GetName() {
+    int index = ui->tabWidget->currentIndex();
+    return ui->tabWidget->tabText(index);
+}
