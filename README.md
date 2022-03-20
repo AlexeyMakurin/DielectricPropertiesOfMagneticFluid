@@ -8,6 +8,8 @@ This program is designed to process data obtained in the study of magnetic fluid
 
 Usually, in all physical problems related to the diffusion or viscosity of a magnetic fluid (MF), the hydrodynamic particle size of the MF is required. One of the methods capable of measuring precisely the hydrodynamic size can be dielectric analysis, i.e. measurement of frequency dependences of complex permittivity. According to the Debye theory, the relaxation time of particles in an alternating electric field is determined by the effective (hydrodynamic) particle size.
 
+![Example](images/1.gif)
+
 ### Debye formulas
 According to the Debye theory, the real and imaginary parts of the complex permittivity $\varepsilon = \varepsilon^{'} + i \cdot \varepsilon^{''}$ are expressed as:
 
